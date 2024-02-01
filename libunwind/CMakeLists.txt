@@ -256,6 +256,11 @@ if (NOT LIBUNWIND_ENABLE_THREADS)
   add_compile_flags(-D_LIBUNWIND_HAS_NO_THREADS)
 endif()
 
+# Wasm EH
+if (LIBUNWIND_ENABLE_WASM_EXCEPTIONS)
+  add_compile_flags(-D__USING_WASM_EXCEPTIONS__)
+endif()
+
 # ARM WMMX register support
 if (LIBUNWIND_ENABLE_ARM_WMMX)
   # __ARM_WMMX is a compiler pre-define (as per the ACLE 2.0). Clang does not

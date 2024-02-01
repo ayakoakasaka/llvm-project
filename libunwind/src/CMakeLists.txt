@@ -2,14 +2,29 @@
 
 set(LIBUNWIND_CXX_SOURCES
     libunwind.cpp
-    Unwind-EHABI.cpp
-    Unwind-seh.cpp
     )
+
+if (NOT LIBUNWIND_ENABLE_WASM_EXCEPTIONS)
+  list(APPEND LIBUNWIND_CXX_SOURCES
+  Unwind-EHABI.cpp
+  Unwind-seh.cpp
+)
+endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "AIX")
   list(APPEND LIBUNWIND_CXX_SOURCES
     Unwind_AIXExtras.cpp
     )
+endif()
+
+if (LIBUNWIND_ENABLE_WASM_EXCEPTIONS)
+  set(LIBUNWIND_C_SOURCES Unwind-wasm.c)
+else ()
+  set(LIBUNWIND_C_SOURCES
+      UnwindLevel1.c
+      UnwindLevel1-gcc-ext.c
+      Unwind-sjlj.c
+     )
 endif()
 
 set(LIBUNWIND_C_SOURCES

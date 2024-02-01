@@ -207,7 +207,11 @@ void __cxa_free_exception(void *thrown_object) throw() {
 }
 
 __cxa_exception* __cxa_init_primary_exception(void* object, std::type_info* tinfo,
+#ifdef __USING_WASM_EXCEPTIONS__
+                                             void*(_LIBCXXABI_DTOR_FUNC* dest)(void*)) throw() {
+#else
                                               void(_LIBCXXABI_DTOR_FUNC* dest)(void*)) throw() {
+#endif
   __cxa_exception* exception_header = cxa_exception_from_thrown_object(object);
   exception_header->referenceCount = 0;
   exception_header->unexpectedHandler = std::get_unexpected();
@@ -275,7 +279,7 @@ __cxa_throw(void *thrown_object, std::type_info *tinfo, void (_LIBCXXABI_DTOR_FU
 #endif
   __cxa_eh_globals* globals = __cxa_get_globals();
   globals->uncaughtExceptions += 1; // Not atomically, since globals are thread-local
-
+ 
   __cxa_exception* exception_header = __cxa_init_primary_exception(thrown_object, tinfo, dest);
   exception_header->referenceCount = 1; // This is a newly allocated exception, no need for thread safety.
 

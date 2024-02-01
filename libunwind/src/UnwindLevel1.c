@@ -31,7 +31,7 @@
 #include "libunwind_ext.h"
 #include "unwind.h"
 
-#if !defined(_LIBUNWIND_ARM_EHABI) && !defined(__USING_SJLJ_EXCEPTIONS__)
+#if !defined(_LIBUNWIND_ARM_EHABI) && !defined(__USING_SJLJ_EXCEPTIONS__) && !defined(__USING_WASM_EXCEPTIONS__)
 
 #ifndef _LIBUNWIND_SUPPORT_SEH_UNWIND
 
